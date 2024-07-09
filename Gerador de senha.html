@@ -1,0 +1,70 @@
+#include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <time.h>
+    
+    char getRandomSpecialChar() {
+        char specialChars[] = "!@#$%^&*()_+{}:\"<>?-=[];',./";
+        return specialChars[rand() % strlen(specialChars)];
+    }
+    
+    void generatePassword(char *name, char *birthdate, char *dogName, int favoriteNumber) {
+    
+        srand(time(NULL));
+    
+        char input[100];
+        strcpy(input, name);
+        strcat(input, birthdate);
+        strcat(input, dogName);
+    
+        char favoriteNumberStr[20];
+        sprintf(favoriteNumberStr, "%d", favoriteNumber);
+        strcat(input, favoriteNumberStr);
+    
+        char password[100];
+        strcpy(password, input);
+    
+        int passwordLength = strlen(password);
+        for (int i = 0; i < passwordLength; i++) {
+            if (isalpha(password[i])) {
+                if (rand() % 2 == 0)
+                    password[i] = toupper(password[i]);
+                else
+                    password[i] = tolower(password[i]);
+                
+                if (password[i] == 'A' || password[i] == 'a')
+                    password[i] = '@';
+                else if (password[i] == 'O' || password[i] == 'o')
+                    password[i] = '0';
+                else if (password[i] == 'I' || password[i] == 'i')
+                    password[i] = '!';
+                else if (password[i] == 'E' || password[i] == 'e')
+                    password[i] = '3';
+            } else if (isdigit(password[i])) {
+                continue;
+            } else {
+                if (rand() % 100 < 20)
+                    password[i] = getRandomSpecialChar();
+            }
+        }
+    
+        printf("Sua senha: %s\n", password);
+    }
+    
+    int main() {
+        char name[50], birthdate[5], dogName[50];
+        int favoriteNumber;
+    
+        printf("Coloque seu nome: ");
+        scanf("%s", name);
+        printf("Coloque seu aniversário (DDMM): ");
+        scanf("%s", birthdate);
+        printf("Coloque o nome do seu cachorro: ");
+        scanf("%s", dogName);
+        printf("Coloque seu número favorito: ");
+        scanf("%d", &favoriteNumber);
+    
+        generatePassword(name, birthdate, dogName, favoriteNumber);
+    
+        return 0;
+    }
